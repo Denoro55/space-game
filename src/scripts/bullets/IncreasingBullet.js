@@ -7,7 +7,6 @@ export default class extends Circle {
         this.savedSpeed = params.speed;
         this.speed = new Vector(0, 0);
         this.timer = 50;
-        this.name = 'enemyBullet';
         this.damage = 1;
     }
 

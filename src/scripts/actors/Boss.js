@@ -6,5 +6,7 @@ export default class extends Actor {
         super(params);
         this.shape = Shapes.circle;
         this.color = Colors.aqua;
+        this.maxHp = 100;
+        this.hp = this.maxHp;
     }
 }

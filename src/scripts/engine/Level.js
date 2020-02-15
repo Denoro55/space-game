@@ -1,7 +1,8 @@
-import Vector from "../helpers/Vector"
-import {Circle, Player, Polygon, Square, Sparkle} from "../actors"
-import {Boss1, Boss2} from "../bosses/"
-import {Shapes} from "../helpers"
+import {Circle, Player, Polygon, Square, Sparkle, Star} from "../actors"
+import {Boss1, Boss2} from "../bosses"
+import {Colors, Shapes, Vector} from "../helpers"
+import trackKeys from "../components/keys"
+import {getRandomPoint} from "../helpers/functions"
 
 const mapsObjects = {
     'x': 'wall',
@@ -20,6 +21,9 @@ const mapsActors = {
     'p': (w, h) => new Polygon({pos: new Vector(w, h)}),
     'B': (w, h, levelIndex) => new bosses[levelIndex]({pos: new Vector(w, h)})
 }
+
+// клавиши
+const keys = trackKeys();
 
 // function rotate(rect, deg) {
 //     const alpha = deg * Math.PI / 180; // radians
@@ -44,32 +48,19 @@ function clamp (x, min, max) {
     return x;
 }
 
-// клавиши
-const arrowCodes = {37: "left", 38: "up", 39: "right", 40: "down"};
-const keys = trackKeys(arrowCodes);
-
-function trackKeys(codes) {
-    const pressed = {};
-    const handler = (e) => {
-        if (codes.hasOwnProperty(e.keyCode)) {
-            const down = e.type === 'keydown'
-            pressed[codes[e.keyCode]] = down;
-            e.preventDefault();
-        }
-    }
-    addEventListener('keydown', handler);
-    addEventListener('keyup', handler);
-    return pressed;
-}
-
-function Level(currentMap, levelIndex) {
+function Level(currentMap, levelIndex, config) {
+    this.cellSize = 40;
     this.width = currentMap[0].length;
     this.height = currentMap.length;
-    this.cellSize = 40;
+    this.screenWidth = 1000 / this.cellSize;
+    this.screenHeight = 600 / this.cellSize;
     this.grid = [];
     this.actors = [];
     this.effects = [];
     this.levelIndex = levelIndex;
+    this.config = config;
+    this.player = {};
+    this.boss = {};
 
     for (let h = 0; h < this.height; h++ ) {
         let gridLine = [];
@@ -81,11 +72,32 @@ function Level(currentMap, levelIndex) {
         }
         this.grid.push(gridLine);
     }
+
+    // stars
+    for (let i = 0; i < 20; i++) {
+        this.effects.push(new Star({
+            pos: getRandomPoint(this.screenWidth, this.screenHeight),
+            size: new Vector(0, 0),
+            color: Colors.white,
+            strokeWidth: 1,
+            rotation: Math.random() * 180,
+            style: 'fill'
+        }))
+    }
+
+    addEventListener('keyup', (e) => {
+        if (e.keyCode === 83) {
+            this.state = 'game';
+        }
+    });
 }
 
 Level.prototype.animate = function() {
-    console.log('Actors count: ', this.actors.length)
-    console.log(this.effects)
+    if (this.config.debug) {
+        console.log('Actors count: ', this.actors.length);
+        console.log(this.effects);
+        console.log(keys)
+    }
     this.updateActors();
 }
 
@@ -114,15 +126,20 @@ Level.prototype.actorAt = function(actor) {
                     }
                     break
                 case 'circle':
-                    var centerX = (other.pos.x + 0.5) * this.cellSize;
-                    var centerY = (other.pos.y + 0.5) * this.cellSize;
+                    const distance = (actor.pos.x - other.pos.x)**2 + (actor.pos.y - other.pos.y)**2;
+                    const sumRadius = (actor.size.x / 2 + other.size.x / 2)**2;
+                    if (distance < sumRadius) return other;
 
-                    var clampedX = clamp(centerX, actor.pos.x * this.cellSize, actor.pos.x * this.cellSize + actor.size.x * this.cellSize);
-                    var clampedY = clamp(centerY, actor.pos.y * this.cellSize, actor.pos.y * this.cellSize + actor.size.y * this.cellSize);
-
-                    if ((clampedX - centerX)**2 + (clampedY - centerY)**2 <= (other.size.x * 0.5 * this.cellSize)**2 ){
-                        return other;
-                    }
+                    // квадрат и круг
+                    // var centerX = (other.pos.x + 0.5) * this.cellSize;
+                    // var centerY = (other.pos.y + 0.5) * this.cellSize;
+                    //
+                    // var clampedX = clamp(centerX, actor.pos.x * this.cellSize, actor.pos.x * this.cellSize + actor.size.x * this.cellSize);
+                    // var clampedY = clamp(centerY, actor.pos.y * this.cellSize, actor.pos.y * this.cellSize + actor.size.y * this.cellSize);
+                    //
+                    // if ((clampedX - centerX)**2 + (clampedY - centerY)**2 <= (other.size.x * 0.5 * this.cellSize)**2 ){
+                    //     return other;
+                    // }
                     break
                 case 'polygon':
                     const point = other.points;
@@ -191,14 +208,17 @@ Level.prototype.createSparkles = function(params) {
     for (let i = 0; i < count; i++) {
         this.effects.push(new Sparkle({
             pos: new Vector(params.pos.x, params.pos.y),
-            size: new Vector(.1 + Math.random() * .1, .1 + Math.random() * .1),
+            size: new Vector(.07 + Math.random() * .07, .07 + Math.random() * .07),
             speed: new Vector(-.1 + Math.random() * .2, -.1 + Math.random() * .2),
             color: params.color,
             strokeWidth: 1,
-            shape: Shapes.circle,
-            level: this
+            shape: Shapes.circle
         }))
     }
+}
+
+Level.prototype.createActor = function(actor) {
+    this.actors.push(actor)
 }
 
 export default Level;
