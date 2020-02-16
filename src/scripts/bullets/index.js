@@ -1,4 +1,4 @@
-import IncreasingBullet from "./IncreasingBullet"
 import PlayerBullet from "./PlayerBullet"
+import Bullet from "./Bullet"
 
-export {IncreasingBullet, PlayerBullet}
+export {PlayerBullet, Bullet}

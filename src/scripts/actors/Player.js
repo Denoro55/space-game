@@ -2,6 +2,7 @@ import {Colors, Vector, Shapes} from "../helpers"
 import Actor from "./Actor"
 import {PlayerBullet} from "../bullets"
 import {getAngleBetween} from "../helpers/functions"
+import Boss from "./Boss"
 
 export default class extends Actor {
     constructor(params) {
@@ -9,16 +10,16 @@ export default class extends Actor {
         this.size = new Vector(0.8, 0.8)
         this.speed = new Vector(0.1, 0.1);
         this.shape = Shapes.circle;
-        this.color = Colors.yellow;
+        this.color = Colors.green;
         this.colors = {
-            initial: Colors.yellow,
+            initial: Colors.player,
             touched: Colors.blue
         }
         this.maxHp = 100;
         this.hp = this.maxHp;
-        this.reloadTime = 30;
+        this.reloadTime = 20;
         this.shootTime = 0;
-        this.bulletSpeed = 0.15
+        this.bulletSpeed = 0.15;
     }
 
     act(level, keys) {
@@ -28,8 +29,11 @@ export default class extends Actor {
                 level.actors = level.actors.filter(actor => actor !== other);
                 this.hp -= other.damage;
                 level.createSparkles({count: 7, spread: 11, pos: other.pos, color: Colors.white});
-            } else {
-                // this.color = this.colors.touched
+            } else if (other instanceof Boss) {
+                this.hp -= other.damage;
+            }
+            if (this.hp <= 0) {
+                level.fail();
             }
         } else {
             this.color = this.colors.initial
@@ -65,7 +69,7 @@ export default class extends Actor {
                 name: 'playerBullet',
                 pos: new Vector(this.pos.x, this.pos.y),
                 speed: new Vector(this.bulletSpeed * Math.cos(angle), this.bulletSpeed * Math.sin(angle)),
-                color: Colors.aqua,
+                color: Colors.player,
                 size: new Vector(.15, .15),
                 damage: 1
             }))

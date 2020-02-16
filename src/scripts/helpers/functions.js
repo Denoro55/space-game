@@ -10,4 +10,12 @@ function getRandomPoint (width, height) {
     return new Vector(Math.floor(Math.random() * (width + 1)), Math.floor(Math.random() * (height + 1)))
 }
 
-export {getAngleBetween, getRandomPoint};
+function angleToDegrees (angle) {
+    return angle / Math.PI * 180;
+}
+
+function angleToRadians (angle) {
+    return angle * Math.PI / 180;
+}
+
+export {getAngleBetween, getRandomPoint, angleToDegrees, angleToRadians};

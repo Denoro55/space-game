@@ -11,14 +11,18 @@ export default class Game {
         this.config = config
 
         addEventListener('keyup', (e) => {
-            if (e.keyCode === 83) {
-                this.changeState('preview')
+            if (e.keyCode === 83 && this.activeState === 'menu') {
+                if (this.config.development) {
+                    this.changeState('game');
+                } else {
+                    this.changeState('preview');
+                }
             }
         });
     }
 
-    addState(name, handler) {
-        this.states[name] = new handler;
+    addState(name, handler, params = {}) {
+        this.states[name] = new handler(params);
     }
 
     runState(name) {
@@ -26,16 +30,21 @@ export default class Game {
         this.run();
     }
 
-    changeState(name) {
+    changeState(name, params = {}) {
         this.activeState = name;
-        this.states[this.activeState].create(this);
+        this.states[this.activeState].create(this, params);
     }
 
     run() {
         const frame = () => {
             this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+            var time = performance.now();
             this.states[this.activeState].update(this);
             this.states[this.activeState].render(this);
+            time = performance.now() - time;
+            if (this.config.scriptTime) {
+                console.log('Время выполнения = ', time);
+            }
             window.requestAnimationFrame(frame);
         }
         frame();

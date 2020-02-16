@@ -1,12 +1,17 @@
 export default class Preview {
-    create() {
-        this.time = 100
+    constructor(params) {
+        this.params = params;
+    }
+
+    create(game, params) {
+        this.time = this.params.time || 100
+        this.text = params.text || this.params.text || "Призрак"
+        this.color = this.params.color || 'aqua'
         this.pause = 50
         this.state = 'fadeIn'
     }
 
     update(game) {
-        console.log('update preview')
         switch (this.state) {
             case 'fadeIn':
                 if (this.time > 0) {
@@ -27,6 +32,7 @@ export default class Preview {
                     this.time += 1;
                 } else {
                     game.changeState('game')
+                    game.ctx.globalAlpha = 1
                 }
                 break;
         }
@@ -36,8 +42,8 @@ export default class Preview {
         const ctx = game.ctx;
         ctx.globalAlpha = (100 - this.time) / 100;
         ctx.font = "18px Arial";
-        ctx.fillStyle = "white";
+        ctx.fillStyle = this.color;
         ctx.textAlign = "center";
-        ctx.fillText("Призрак", game.canvas.width / 2, game.canvas.height / 2);
+        ctx.fillText(this.text, game.canvas.width / 2, game.canvas.height / 2);
     }
 }

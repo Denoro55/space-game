@@ -1,7 +1,7 @@
 import {Vector} from "../helpers"
 
 export default function () {
-    const codes = {37: "left", 38: "up", 39: "right", 40: "down"};
+    const codes = {37: "left", 38: "up", 39: "right", 40: "down", 87: "up", 68: "right", 65: "left", 83: "down"};
 
     const pressed = {};
     const handler = (e) => {

@@ -1,6 +1,6 @@
 export default class Menu {
     update() {
-        console.log('update menu')
+
     }
 
     render(game) {

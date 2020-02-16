@@ -48,7 +48,8 @@ function clamp (x, min, max) {
     return x;
 }
 
-function Level(currentMap, levelIndex, config) {
+function Level(game, currentMap, levelIndex, config) {
+    this.game = game;
     this.cellSize = 40;
     this.width = currentMap[0].length;
     this.height = currentMap.length;
@@ -80,25 +81,27 @@ function Level(currentMap, levelIndex, config) {
             size: new Vector(0, 0),
             color: Colors.white,
             strokeWidth: 1,
-            rotation: Math.random() * 180,
+            rotation: 0,
+            delay: Math.random() * 60,
             style: 'fill'
         }))
     }
-
-    addEventListener('keyup', (e) => {
-        if (e.keyCode === 83) {
-            this.state = 'game';
-        }
-    });
 }
 
 Level.prototype.animate = function() {
     if (this.config.debug) {
-        console.log('Actors count: ', this.actors.length);
-        console.log(this.effects);
-        console.log(keys)
+        console.log('Actors count: ', this.actors.length, '| Effects count: ', this.effects.length);
+        // console.log(keys)
     }
     this.updateActors();
+}
+
+Level.prototype.fail = function() {
+    this.game.changeState('fail');
+}
+
+Level.prototype.win = function(params) {
+    this.game.changeState('win', params);
 }
 
 Level.prototype.updateActors = function() {
@@ -112,9 +115,12 @@ Level.prototype.updateActors = function() {
     })
 }
 
-Level.prototype.actorAt = function(actor) {
+Level.prototype.actorAt = function(actor, filter) {
     for (let i = 0; i < this.actors.length; i++) {
         const other = this.actors[i];
+        if (filter && filter.name !== other.name) {
+            continue;
+        }
         if (other !== actor) {
             switch (other.shape) {
                 case 'square':
@@ -219,6 +225,10 @@ Level.prototype.createSparkles = function(params) {
 
 Level.prototype.createActor = function(actor) {
     this.actors.push(actor)
+}
+
+Level.prototype.destroyActor = function(actor) {
+    this.actors = this.actors.filter(a => a !== actor);
 }
 
 export default Level;

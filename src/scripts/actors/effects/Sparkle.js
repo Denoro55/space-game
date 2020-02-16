@@ -1,4 +1,4 @@
-import Actor from "./Actor"
+import Actor from "../Actor"
 
 export default class extends Actor {
     constructor(params) {
@@ -12,6 +12,7 @@ export default class extends Actor {
         if (this.time > 0) {
             this.time -= 1;
             this.speed = this.speed.down(.004);
+            this.alpha = this.time / this.maxTime;
         } else {
             level.effects = level.effects.filter(effect => effect !== this);
         }
