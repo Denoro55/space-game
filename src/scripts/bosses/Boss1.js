@@ -37,7 +37,7 @@ export default class extends Boss {
                 waves: 15,
                 nextState: [0, 1, 2]
             }
-        ]
+        ];
         this.activeStateIndex = 0;
         this.currentStateIndex = null;
         this.weapons = {
@@ -51,12 +51,12 @@ export default class extends Boss {
                 type: 0,
                 weapon: null
             },
-        }
+        };
         this.bulletOptions = {
             offset: 1.9,
             speed: 0.12,
             damage: 10
-        }
+        };
         this.delay = 0;
         this.alpha = 1;
         this.alphaTransitionSpeed = 0.004;
@@ -114,14 +114,14 @@ export default class extends Boss {
                                 type: 'changeSpeed',
                                 speed: this.bulletOptions.speed
                             }]
-                        }))
+                        }));
 
                         state.bullets -=1;
                     }
                     if (state.bullets <= 0) {
                         this.nextState(level);
                     }
-                    break
+                    break;
                 case 1:
                     if (this.shootTime <= 0 && state.bulletPositions.length > 0) {
                         const angle = state.bulletPositions.shift() * 45 * Math.PI / 180;
@@ -151,14 +151,14 @@ export default class extends Boss {
                                     type: 'changeSpeed',
                                     speed: this.bulletOptions.speed
                                 }]
-                        }))
+                        }));
 
                         this.shootTime = this.reloadTime;
                     }
                     if (state.bulletPositions.length <= 0) {
                         this.nextState(level);
                     }
-                    break
+                    break;
                 case 2:
                     super.act(level);
 

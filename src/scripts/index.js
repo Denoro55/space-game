@@ -11,7 +11,7 @@ const config = {
     development: false,
     debug: false,
     scriptTime: false
-}
+};
 
 const game = new Game(canvas, maps, config);
 game.addState('menu', Menu);

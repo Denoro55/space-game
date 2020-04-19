@@ -9,7 +9,7 @@ export default function () {
             pressed[codes[e.keyCode]] = e.type === 'keydown';
             e.preventDefault();
         }
-    }
+    };
 
     const mouseHandler = (e) => {
         if (e.type === 'mousedown') {
@@ -19,7 +19,7 @@ export default function () {
             pressed['mouseDown'] = false;
         }
         pressed['mouse'] = new Vector(e.clientX - 10, e.clientY - 10);
-    }
+    };
 
     addEventListener('keydown', handler);
     addEventListener('keyup', handler);

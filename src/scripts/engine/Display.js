@@ -34,14 +34,14 @@ Display.prototype.drawActors = function(ctx) {
                 ctx.moveTo(actor.pos.x * this.level.cellSize + actor.points[0][0], actor.pos.y * this.level.cellSize + actor.points[0][1]);
                 actor.points.slice(1).forEach(point => {
                     ctx.lineTo(actor.pos.x * this.level.cellSize + point[0], actor.pos.y * this.level.cellSize + point[1]);
-                })
+                });
                 ctx.stroke();
                 break;
         }
         // ctx.closePath()
         // ctx.restore();
     })
-}
+};
 
 Display.prototype.drawEffects = function(ctx) {
     this.level.effects.forEach(effect => {
@@ -77,7 +77,7 @@ Display.prototype.drawEffects = function(ctx) {
         }
         ctx.globalAlpha = 1;
     })
-}
+};
 
 Display.prototype.drawBackground = function(ctx) {
     ctx.drawImage(image, 0, 0);
@@ -91,6 +91,6 @@ Display.prototype.drawBackground = function(ctx) {
     ctx.fillStyle = "#6dd42c";
     const percent = this.level.player.hp * 100 / this.level.player.maxHp / 100;
     ctx.fillRect(0, this.level.screenHeight * this.level.cellSize - 5, (this.level.screenWidth * this.level.cellSize) * percent, this.level.screenHeight * this.level.cellSize);
-}
+};
 
 export default Display;

@@ -1,8 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="996714b0-8965-4bbb-8f5a-5f045fa74246" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/Game.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/Game.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/actors/Player.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/actors/Player.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/bosses/Boss1.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/bosses/Boss1.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/keys.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/keys.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/engine/Display.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/engine/Display.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/engine/Level.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/engine/Level.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/states/Game.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/states/Game.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/states/Preview.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/states/Preview.js" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1XmzYJfZ0QytXHd2crdB3xyLtm7" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="E:/mylibs/selectorizer" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="996714b0-8965-4bbb-8f5a-5f045fa74246" name="Default Changelist" comment="" />
+      <created>1582552757588</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582552757588</updated>
+      <workItem from="1582552758762" duration="2944000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

@@ -7,14 +7,10 @@ import Boss from "./Boss"
 export default class extends Actor {
     constructor(params) {
         super(params);
-        this.size = new Vector(0.8, 0.8)
+        this.size = new Vector(0.8, 0.8);
         this.speed = new Vector(0.1, 0.1);
         this.shape = Shapes.circle;
         this.color = Colors.green;
-        this.colors = {
-            initial: Colors.player,
-            touched: Colors.blue
-        }
         this.maxHp = 100;
         this.hp = this.maxHp;
         this.reloadTime = 20;
@@ -36,7 +32,7 @@ export default class extends Actor {
                 level.fail();
             }
         } else {
-            this.color = this.colors.initial
+            // this.color = this.colors.initial
         }
 
         let diagonalSpeed = 1;
@@ -72,7 +68,7 @@ export default class extends Actor {
                 color: Colors.player,
                 size: new Vector(.15, .15),
                 damage: 1
-            }))
+            }));
             this.shootTime = this.reloadTime;
         }
 

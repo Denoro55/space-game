@@ -4,10 +4,10 @@ export default class Preview {
     }
 
     create(game, params) {
-        this.time = this.params.time || 100
-        this.text = params.text || this.params.text || "Призрак"
-        this.color = this.params.color || 'aqua'
-        this.pause = 50
+        this.time = this.params.time || 100;
+        this.text = params.text || this.params.text || "Призрак";
+        this.color = this.params.color || 'aqua';
+        this.pause = 50;
         this.state = 'fadeIn'
     }
 
@@ -31,7 +31,7 @@ export default class Preview {
                 if (this.time < 100) {
                     this.time += 1;
                 } else {
-                    game.changeState('game')
+                    game.changeState('game');
                     game.ctx.globalAlpha = 1
                 }
                 break;

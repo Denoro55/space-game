@@ -7,12 +7,12 @@ import {getRandomPoint} from "../helpers/functions"
 const mapsObjects = {
     'x': 'wall',
     'o': 'coin'
-}
+};
 
 const bosses = {
     0: Boss1,
     1: Boss2
-}
+};
 
 const mapsActors = {
     '@': (w, h) => new Player({pos: new Vector(w, h)}),
@@ -20,7 +20,7 @@ const mapsActors = {
     'c': (w, h)=> new Circle({pos: new Vector(w, h)}),
     'p': (w, h) => new Polygon({pos: new Vector(w, h)}),
     'B': (w, h, levelIndex) => new bosses[levelIndex]({pos: new Vector(w, h)})
-}
+};
 
 // клавиши
 const keys = trackKeys();
@@ -68,7 +68,7 @@ function Level(game, currentMap, levelIndex, config) {
         for (let w = 0; w < this.width; w++ ) {
             const object = currentMap[h][w];
             const actor = mapsActors[object];
-            if (actor) this.actors.push(mapsActors[object](w, h, this.levelIndex))
+            if (actor) this.actors.push(mapsActors[object](w, h, this.levelIndex));
             gridLine[w] = mapsObjects[object] || null;
         }
         this.grid.push(gridLine);
@@ -94,26 +94,26 @@ Level.prototype.animate = function() {
         // console.log(keys)
     }
     this.updateActors();
-}
+};
 
 Level.prototype.fail = function() {
     this.game.changeState('fail');
-}
+};
 
 Level.prototype.win = function(params) {
     this.game.changeState('win', params);
-}
+};
 
 Level.prototype.updateActors = function() {
     this.actors.forEach(actor => {
         actor.act(this, keys);
-    })
+    });
 
     this.effects.forEach(effect => {
         effect.act(this);
         effect.update(this);
     })
-}
+};
 
 Level.prototype.actorAt = function(actor, filter) {
     for (let i = 0; i < this.actors.length; i++) {
@@ -130,7 +130,7 @@ Level.prototype.actorAt = function(actor, filter) {
                         actor.pos.y < other.size.y + other.pos.y) {
                         return other;
                     }
-                    break
+                    break;
                 case 'circle':
                     const distance = (actor.pos.x - other.pos.x)**2 + (actor.pos.y - other.pos.y)**2;
                     const sumRadius = (actor.size.x / 2 + other.size.x / 2)**2;
@@ -139,14 +139,14 @@ Level.prototype.actorAt = function(actor, filter) {
                     // квадрат и круг
                     // var centerX = (other.pos.x + 0.5) * this.cellSize;
                     // var centerY = (other.pos.y + 0.5) * this.cellSize;
-                    //
+                    
                     // var clampedX = clamp(centerX, actor.pos.x * this.cellSize, actor.pos.x * this.cellSize + actor.size.x * this.cellSize);
                     // var clampedY = clamp(centerY, actor.pos.y * this.cellSize, actor.pos.y * this.cellSize + actor.size.y * this.cellSize);
-                    //
+                    
                     // if ((clampedX - centerX)**2 + (clampedY - centerY)**2 <= (other.size.x * 0.5 * this.cellSize)**2 ){
                     //     return other;
                     // }
-                    break
+                    break;
                 case 'polygon':
                     const point = other.points;
                     let collision = false;
@@ -176,29 +176,29 @@ Level.prototype.actorAt = function(actor, filter) {
                         })
                     }
                     if (collision) return other;
-                    break
+                    break;
             }
         }
     }
-}
+};
 
 Level.prototype.check = function(ax, ay, bx, by, cx, cy, dx, dy, obj, otherObj) {
-    var v1x = bx - ax // вектор AB
-    var v1y = by - ay
-    var v2x = cx - ax // вектор AC
-    var v2y = cy - ay
-    var v3x = dx - ax // вектор AD
-    var v3y = dy - ay
-    var v4x = dx - cx // вектор CD
-    var v4y = dy - cy
-    var v5x = bx - cx // вектор CB
-    var v5y = by - cy
-    var v6x = ax - cx // вектор CA
-    var v6y = ay - cy
-    var coord1 = v1x * v2y - v1y * v2x // [AB, AC]
-    var coord2 = v1x * v3y - v1y * v3x // [AB, AD]
-    var coord3 = v4x * v5y - v4y * v5x // [CD, CB]
-    var coord4 = v4x * v6y - v4y * v6x // [CD, CA]
+    var v1x = bx - ax; // вектор AB
+    var v1y = by - ay;
+    var v2x = cx - ax; // вектор AC
+    var v2y = cy - ay;
+    var v3x = dx - ax; // вектор AD
+    var v3y = dy - ay;
+    var v4x = dx - cx; // вектор CD
+    var v4y = dy - cy;
+    var v5x = bx - cx; // вектор CB
+    var v5y = by - cy;
+    var v6x = ax - cx; // вектор CA
+    var v6y = ay - cy;
+    var coord1 = v1x * v2y - v1y * v2x; // [AB, AC]
+    var coord2 = v1x * v3y - v1y * v3x; // [AB, AD]
+    var coord3 = v4x * v5y - v4y * v5x; // [CD, CB]
+    var coord4 = v4x * v6y - v4y * v6x; // [CD, CA]
     const result = coord1 * coord2 <= 0 && coord3 * coord4 <= 0;
     if (coord1 * coord2  + coord3 * coord4 === 0) {
         if (obj.pos.x * this.cellSize + obj.size.x * this.cellSize < otherObj.pos.x * this.cellSize
@@ -207,7 +207,7 @@ Level.prototype.check = function(ax, ay, bx, by, cx, cy, dx, dy, obj, otherObj) 
         }
     }
     return result;
-}
+};
 
 Level.prototype.createSparkles = function(params) {
     const count = params.count + Math.floor(Math.random() * (params.spread + 1));
@@ -221,14 +221,14 @@ Level.prototype.createSparkles = function(params) {
             shape: Shapes.circle
         }))
     }
-}
+};
 
 Level.prototype.createActor = function(actor) {
     this.actors.push(actor)
-}
+};
 
 Level.prototype.destroyActor = function(actor) {
     this.actors = this.actors.filter(a => a !== actor);
-}
+};
 
 export default Level;

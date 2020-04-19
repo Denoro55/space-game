@@ -1,14 +1,14 @@
 export default class Game {
     constructor(canvas, maps, config) {
-        this.states = {}
-        this.activeState = null
-        this.canvas = canvas
-        this.ctx = this.canvas.getContext('2d')
-        this.gameWidth = this.canvas.width
-        this.gameHeight = this.canvas.height
-        this.maps = maps
-        this.currentLevel = 0
-        this.config = config
+        this.states = {};
+        this.activeState = null;
+        this.canvas = canvas;
+        this.ctx = this.canvas.getContext('2d');
+        this.gameWidth = this.canvas.width;
+        this.gameHeight = this.canvas.height;
+        this.maps = maps;
+        this.currentLevel = 0;
+        this.config = config;
 
         addEventListener('keyup', (e) => {
             if (e.keyCode === 83 && this.activeState === 'menu') {
@@ -46,7 +46,7 @@ export default class Game {
                 console.log('Время выполнения = ', time);
             }
             window.requestAnimationFrame(frame);
-        }
+        };
         frame();
     }
 }

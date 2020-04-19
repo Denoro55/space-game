@@ -3,7 +3,7 @@ import Display from "../engine/Display"
 
 export default class Game {
     create(game) {
-        this.level = new Level(game, game.maps[game.currentLevel], game.currentLevel, game.config)
+        this.level = new Level(game, game.maps[game.currentLevel], game.currentLevel, game.config);
         this.display = new Display(this.level)
     }
 
