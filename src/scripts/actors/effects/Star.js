@@ -1,6 +1,5 @@
 import Actor from "../Actor"
-import {Shapes, Vector} from "../../helpers"
-import {getRandomPoint} from "../../helpers/functions"
+import {Shapes, Vector, getRandomPoint} from "../../helpers"
 
 export default class extends Actor {
     constructor(params) {
@@ -9,7 +8,7 @@ export default class extends Actor {
         this.alpha = 0;
         this.sign = 0;
         this.rotation = params.rotation || 0;
-        this.startPos = this.pos
+        this.startPos = this.pos;
         this.delay = params.delay
     }
 
@@ -22,7 +21,7 @@ export default class extends Actor {
             this.alpha = Math.abs(sin);
             const newSign = Math.sign(sin);
             this.size = new Vector(this.alpha * .16, this.alpha * .16);
-            this.pos = new Vector(this.startPos.x - this.alpha * .08, this.startPos.y - this.alpha * .08)
+            this.pos = new Vector(this.startPos.x - this.alpha * .08, this.startPos.y - this.alpha * .08);
             if (Math.sign(sin) !== this.sign) {
                 this.startPos = getRandomPoint(level.screenWidth, level.screenHeight);
             }

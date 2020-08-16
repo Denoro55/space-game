@@ -9,16 +9,6 @@ export default class Game {
         this.maps = maps;
         this.currentLevel = 0;
         this.config = config;
-
-        addEventListener('keyup', (e) => {
-            if (e.keyCode === 83 && this.activeState === 'menu') {
-                if (this.config.development) {
-                    this.changeState('game');
-                } else {
-                    this.changeState('preview');
-                }
-            }
-        });
     }
 
     addState(name, handler, params = {}) {
@@ -35,7 +25,12 @@ export default class Game {
         this.states[this.activeState].create(this, params);
     }
 
+    setCurrentLevel(levelIndex) {
+        this.currentLevel = levelIndex;
+    }
+
     run() {
+        this.states[this.activeState].create(this);
         const frame = () => {
             this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
             var time = performance.now();

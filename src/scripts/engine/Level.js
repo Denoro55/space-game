@@ -2,7 +2,8 @@ import {Circle, Player, Polygon, Square, Sparkle, Star} from "../actors"
 import {Boss1, Boss2} from "../bosses"
 import {Colors, Shapes, Vector} from "../helpers"
 import trackKeys from "../components/keys"
-import {getRandomPoint} from "../helpers/functions"
+import {getRandomPoint} from "../helpers"
+import {intersectCircleLine, intersectLines} from '../helpers';
 
 const mapsObjects = {
     'x': 'wall',
@@ -15,11 +16,11 @@ const bosses = {
 };
 
 const mapsActors = {
-    '@': (w, h) => new Player({pos: new Vector(w, h)}),
-    's': (w, h) => new Square({pos: new Vector(w, h)}),
-    'c': (w, h)=> new Circle({pos: new Vector(w, h)}),
-    'p': (w, h) => new Polygon({pos: new Vector(w, h)}),
-    'B': (w, h, levelIndex) => new bosses[levelIndex]({pos: new Vector(w, h)})
+    '@': (w, h, level) => new Player({pos: new Vector(w, h)}, level),
+    's': (w, h, level) => new Square({pos: new Vector(w, h)}, level),
+    'c': (w, h, level)=> new Circle({pos: new Vector(w, h)}, level),
+    'p': (w, h, level) => new Polygon({pos: new Vector(w, h)}, level),
+    'B': (w, h, level) => new bosses[level.levelIndex]({pos: new Vector(w, h)}, level)
 };
 
 // клавиши
@@ -68,7 +69,7 @@ function Level(game, currentMap, levelIndex, config) {
         for (let w = 0; w < this.width; w++ ) {
             const object = currentMap[h][w];
             const actor = mapsActors[object];
-            if (actor) this.actors.push(mapsActors[object](w, h, this.levelIndex));
+            if (actor) this.actors.push(mapsActors[object](w, h, this));
             gridLine[w] = mapsObjects[object] || null;
         }
         this.grid.push(gridLine);
@@ -91,17 +92,22 @@ function Level(game, currentMap, levelIndex, config) {
 Level.prototype.animate = function() {
     if (this.config.debug) {
         console.log('Actors count: ', this.actors.length, '| Effects count: ', this.effects.length);
-        // console.log(keys)
     }
     this.updateActors();
 };
 
 Level.prototype.fail = function() {
-    this.game.changeState('fail');
+    this.game.changeState('fail', {
+        color: this.boss.color
+    });
 };
 
 Level.prototype.win = function(params) {
-    this.game.changeState('win', params);
+    const newParams = {
+        ...params,
+        color: this.boss.color
+    };
+    this.game.changeState('win', newParams);
 };
 
 Level.prototype.updateActors = function() {
@@ -139,74 +145,68 @@ Level.prototype.actorAt = function(actor, filter) {
                     // квадрат и круг
                     // var centerX = (other.pos.x + 0.5) * this.cellSize;
                     // var centerY = (other.pos.y + 0.5) * this.cellSize;
-                    
+
                     // var clampedX = clamp(centerX, actor.pos.x * this.cellSize, actor.pos.x * this.cellSize + actor.size.x * this.cellSize);
                     // var clampedY = clamp(centerY, actor.pos.y * this.cellSize, actor.pos.y * this.cellSize + actor.size.y * this.cellSize);
-                    
+
                     // if ((clampedX - centerX)**2 + (clampedY - centerY)**2 <= (other.size.x * 0.5 * this.cellSize)**2 ){
                     //     return other;
                     // }
                     break;
                 case 'polygon':
-                    const point = other.points;
+                    // square collision
+                    // const point = other.shapeOptions.points;
+                    // let collision = false;
+                    // for (let i = 0; i < other.shapeOptions.points.length - 1; i++) {
+                    //     var ax = other.pos.x * this.cellSize + point[i][0];
+                    //     var ay = other.pos.y * this.cellSize + point[i][1];
+                    //     var bx = other.pos.x * this.cellSize + point[i + 1][0];
+                    //     var by = other.pos.y * this.cellSize + point[i + 1][1];
+                    //
+                    //     const actorX = actor.pos.x * this.cellSize;
+                    //     const actorY = actor.pos.y * this.cellSize;
+                    //
+                    //     const actorLines = [[actorX, actorY, actorX + actor.size.x * this.cellSize, actorY],
+                    //         [actorX + actor.size.x * this.cellSize, actorY, actorX + actor.size.x * this.cellSize, actorY + actor.size.y * this.cellSize],
+                    //         [actorX + actor.size.x * this.cellSize, actorY + actor.size.y * this.cellSize, actorX, actorY + actor.size.y * this.cellSize],
+                    //         [actorX, actorY, actorX, actorY + actor.size.y * this.cellSize]];
+                    //
+                    //     actorLines.forEach(line => {
+                    //         var cx = line[0];
+                    //         var cy = line[1];
+                    //         var dx = line[2];
+                    //         var dy = line[3];
+                    //
+                    //         if (intersectLines(ax, ay, bx, by, cx, cy, dx, dy, actor, other)){
+                    //             collision = true;
+                    //         }
+                    //     })
+                    // }
+                    // if (collision) return other;
+
+                    // circle collision
+                    const points = other.shapeOptions.points;
                     let collision = false;
-                    for (let i = 0; i < other.points.length - 1; i++) {
-                        var ax = other.pos.x * this.cellSize + point[i][0];
-                        var ay = other.pos.y * this.cellSize + point[i][1];
-                        var bx = other.pos.x * this.cellSize + point[i + 1][0];
-                        var by = other.pos.y * this.cellSize + point[i + 1][1];
-
-                        const actorX = actor.pos.x * this.cellSize;
-                        const actorY = actor.pos.y * this.cellSize;
-
-                        const actorLines = [[actorX, actorY, actorX + actor.size.x * this.cellSize, actorY],
-                            [actorX + actor.size.x * this.cellSize, actorY, actorX + actor.size.x * this.cellSize, actorY + actor.size.y * this.cellSize],
-                            [actorX + actor.size.x * this.cellSize, actorY + actor.size.y * this.cellSize, actorX, actorY + actor.size.y * this.cellSize],
-                            [actorX, actorY, actorX, actorY + actor.size.y * this.cellSize]];
-
-                        actorLines.forEach(line => {
-                            var cx = line[0];
-                            var cy = line[1];
-                            var dx = line[2];
-                            var dy = line[3];
-
-                            if (this.check(ax, ay, bx, by, cx, cy, dx, dy, actor, other)){
-                                collision = true;
-                            }
-                        })
+                    const center = {
+                        x: actor.pos.x + .5,
+                        y: actor.pos.y + .5
+                    };
+                    for (let i = 1; i < points.length - 1; i++) {
+                        if (intersectCircleLine(
+                            center,
+                            actor.size.x * .5,
+                            {x: other.pos.x + points[i - 1][0], y: other.pos.y + points[i - 1][1]},
+                            {x: other.pos.x + points[i][0], y: other.pos.y + points[i][1]}
+                            )) {
+                            collision = true;
+                            break;
+                        }
                     }
                     if (collision) return other;
                     break;
             }
         }
     }
-};
-
-Level.prototype.check = function(ax, ay, bx, by, cx, cy, dx, dy, obj, otherObj) {
-    var v1x = bx - ax; // вектор AB
-    var v1y = by - ay;
-    var v2x = cx - ax; // вектор AC
-    var v2y = cy - ay;
-    var v3x = dx - ax; // вектор AD
-    var v3y = dy - ay;
-    var v4x = dx - cx; // вектор CD
-    var v4y = dy - cy;
-    var v5x = bx - cx; // вектор CB
-    var v5y = by - cy;
-    var v6x = ax - cx; // вектор CA
-    var v6y = ay - cy;
-    var coord1 = v1x * v2y - v1y * v2x; // [AB, AC]
-    var coord2 = v1x * v3y - v1y * v3x; // [AB, AD]
-    var coord3 = v4x * v5y - v4y * v5x; // [CD, CB]
-    var coord4 = v4x * v6y - v4y * v6x; // [CD, CA]
-    const result = coord1 * coord2 <= 0 && coord3 * coord4 <= 0;
-    if (coord1 * coord2  + coord3 * coord4 === 0) {
-        if (obj.pos.x * this.cellSize + obj.size.x * this.cellSize < otherObj.pos.x * this.cellSize
-            || obj.pos.x * this.cellSize > otherObj.pos.x * this.cellSize + otherObj.size.x * this.cellSize) {
-            return false;
-        }
-    }
-    return result;
 };
 
 Level.prototype.createSparkles = function(params) {

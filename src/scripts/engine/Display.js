@@ -1,4 +1,4 @@
-const image = document.querySelector('#bg');
+const backgroundImages = document.querySelectorAll('.bg-image');
 
 function Display(level) {
     this.level = level;
@@ -8,7 +8,7 @@ Display.prototype.draw = function(game) {
     this.drawBackground(game.ctx);
     this.drawActors(game.ctx);
     this.drawEffects(game.ctx);
-}
+};
 
 Display.prototype.drawActors = function(ctx) {
     this.level.actors.forEach(actor => {
@@ -31,9 +31,16 @@ Display.prototype.drawActors = function(ctx) {
                 ctx.stroke();
                 break;
             case 'polygon':
-                ctx.moveTo(actor.pos.x * this.level.cellSize + actor.points[0][0], actor.pos.y * this.level.cellSize + actor.points[0][1]);
-                actor.points.slice(1).forEach(point => {
-                    ctx.lineTo(actor.pos.x * this.level.cellSize + point[0], actor.pos.y * this.level.cellSize + point[1]);
+                let points = actor.shapeOptions.points;
+                ctx.moveTo(
+                    actor.pos.x * this.level.cellSize + points[0][0] * this.level.cellSize,
+                    actor.pos.y * this.level.cellSize + points[0][1] * this.level.cellSize
+                );
+                points.slice(1).forEach(point => {
+                    ctx.lineTo(
+                        actor.pos.x * this.level.cellSize + point[0] * this.level.cellSize,
+                        actor.pos.y * this.level.cellSize + point[1] * this.level.cellSize
+                    );
                 });
                 ctx.stroke();
                 break;
@@ -80,7 +87,7 @@ Display.prototype.drawEffects = function(ctx) {
 };
 
 Display.prototype.drawBackground = function(ctx) {
-    ctx.drawImage(image, 0, 0);
+    ctx.drawImage(backgroundImages[this.level.levelIndex], 0, 0, 1000, 600);
 
     ctx.beginPath();
     ctx.fillStyle = "#FF0000";

@@ -6,7 +6,7 @@ export default class Preview {
     create(game, params) {
         this.time = this.params.time || 100;
         this.text = params.text || this.params.text || "Призрак";
-        this.color = this.params.color || 'aqua';
+        this.color = params.color || this.params.color;
         this.pause = 50;
         this.state = 'fadeIn'
     }

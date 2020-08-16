@@ -1,21 +1,22 @@
 import {Colors, Vector, Shapes} from "../helpers"
 import Actor from "./Actor"
 import {PlayerBullet} from "../bullets"
-import {getAngleBetween} from "../helpers/functions"
+import {getAngleBetween} from "../helpers"
 import Boss from "./Boss"
 
 export default class extends Actor {
-    constructor(params) {
+    constructor(params, level) {
         super(params);
-        this.size = new Vector(0.8, 0.8);
-        this.speed = new Vector(0.1, 0.1);
+        this.size = new Vector(0.75, 0.75);
+        this.speed = new Vector(0.12, 0.12);
         this.shape = Shapes.circle;
         this.color = Colors.green;
         this.maxHp = 100;
         this.hp = this.maxHp;
         this.reloadTime = 20;
         this.shootTime = 0;
-        this.bulletSpeed = 0.15;
+        this.bulletSpeed = 0.18;
+        level.player = this;
     }
 
     act(level, keys) {
@@ -70,11 +71,6 @@ export default class extends Actor {
                 damage: 1
             }));
             this.shootTime = this.reloadTime;
-        }
-
-        level.player = {
-            hp: this.hp,
-            maxHp: this.maxHp
         }
     }
 }

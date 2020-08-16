@@ -1,17 +1,19 @@
-import Circle from "../actors/Circle"
-import {Colors, Vector} from "../helpers"
+import {Colors, Shapes, Vector} from "../helpers"
 import {Player} from "../actors"
-import {angleToRadians, getAngleBetween} from "../helpers/functions"
+import {angleToRadians, getAngleBetween} from "../helpers"
 import {Bullet} from "./index"
+import Actor from "../actors/Actor"
 
-export default class extends Circle {
+export default class extends Actor {
     constructor(params) {
         super(params);
         this.damage = params.damage || 1;
         this.states = params.states || [];
+        this.angle = params.angle || 0;
+        this.shape = params.shape || Shapes.circle;
+        this.shapeOptions = params.shapeOptions || {};
         this.activeStateIndex = 0;
         this.currentStateIndex = null;
-        this.angle = params.angle || 0;
     }
 
     act (level) {
@@ -72,10 +74,10 @@ export default class extends Circle {
                 }
                 break;
             case 'changeSpeed':
-                this.speed = new Vector(state.speed * Math.cos(this.angle), state.speed * Math.sin(this.angle))
+                this.speed = new Vector(state.speed * Math.cos(this.angle), state.speed * Math.sin(this.angle));
                 break;
             case 'stop':
-                this.speed = new Vector(0, 0)
+                this.speed = new Vector(0, 0);
                 break;
             case 'explode':
                 level.destroyActor(this);

@@ -1,12 +1,12 @@
 import {Colors, Shapes, Vector} from "../helpers"
 import {Boss, Player} from "../actors"
-import {angleToDegrees, angleToRadians, getAngleBetween, getRandomPoint} from "../helpers/functions"
+import {angleToDegrees, angleToRadians, getAngleBetween, getRandomPoint} from "../helpers"
 import Bullet from "../bullets/Bullet"
 import BossWeapon from "../actors/effects/BossWeapon"
 
 export default class extends Boss {
-    constructor(params) {
-        super(params);
+    constructor(params, level) {
+        super(params, level);
         this.name = 'boss';
         this.size = new Vector(2, 2);
         this.damage = 1;
@@ -62,6 +62,7 @@ export default class extends Boss {
         this.alphaTransitionSpeed = 0.004;
         this.maxSpeed = 0.06;
         this.visibility = true;
+        level.boss = this;
     }
 
     act(level) {
@@ -81,8 +82,7 @@ export default class extends Boss {
                     if (this.shootTime <= 0) {
                         this.shootTime = this.reloadTime;
 
-                        const player = level.actors.filter(actor => actor instanceof Player)[0];
-                        const angle = getAngleBetween(player.pos, this.pos);
+                        const angle = getAngleBetween(level.player.pos, this.pos);
 
                         level.actors.push(new Bullet({
                             pos: new Vector(this.pos.x + (this.bulletOptions.offset * Math.cos(angle)), this.pos.y + (this.bulletOptions.offset * Math.sin(angle))),
@@ -123,6 +123,7 @@ export default class extends Boss {
                     }
                     break;
                 case 1:
+                    // radial step simple shooting
                     if (this.shootTime <= 0 && state.bulletPositions.length > 0) {
                         const angle = state.bulletPositions.shift() * 45 * Math.PI / 180;
 
@@ -160,10 +161,9 @@ export default class extends Boss {
                     }
                     break;
                 case 2:
-                    super.act(level);
+                    // super.act(level);
 
-                    const player = level.actors.filter(actor => actor instanceof Player)[0];
-                    this.moveToPoint(player.pos);
+                    this.moveToPoint(level.player.pos);
 
                     if (this.shootTime <= 0) {
                         this.makeFloatingBullet(level);
@@ -178,19 +178,21 @@ export default class extends Boss {
 
                     break;
                 case 3:
-                    super.act(level);
+                    // super.act(level);
                     this.moveToPoint(state.pointPosition);
+
                     if (this.shootTime <= 0) {
                         this.makeFloatingBullet(level);
                         this.shootTime = this.reloadTime;
                     }
+
                     const distance = Math.sqrt((this.pos.x - state.pointPosition.x)**2 + (this.pos.y - state.pointPosition.y)**2);
                     if (distance < this.maxSpeed * 35) {
                         this.nextState(level);
                     }
                     break;
                 case 4:
-                    super.act(level);
+                    // super.act(level);
                     this.moveToPoint(state.pointPosition);
                     const distance2 = Math.sqrt((this.pos.x - state.pointPosition.x)**2 + (this.pos.y - state.pointPosition.y)**2);
                     if (distance2 < this.maxSpeed * 35) {
@@ -198,7 +200,7 @@ export default class extends Boss {
                         if (state.timer < 0) {
                             state.timer = state.startTimer;
                             const percentHealth = this.getPercentHealth();
-                            const count = percentHealth < 50 ? 12 : 8
+                            const count = percentHealth < 50 ? 12 : 8;
                             state.bulletPositions = this.fillBullets(count);
                             this.makeWave(state, level);
                             state.waves -= 1;
@@ -213,22 +215,7 @@ export default class extends Boss {
             }
         }
 
-        // player bullets
-        const other = level.actorAt(this, {name: 'playerBullet'});
-
-        if (other) {
-            level.actors = level.actors.filter(actor => actor !== other);
-            this.hp -= other.damage;
-            level.createSparkles({count: 7, spread: 11, pos: other.pos, color: Colors.white});
-            if (this.hp <= 0) {
-                level.win({text: 'Вы победили призрака!'});
-            }
-        }
-
-        level.boss = {
-            hp: this.hp,
-            maxHp: this.maxHp
-        }
+        super.act(level);
     }
 
     makeWave(state, level) {
@@ -365,7 +352,7 @@ export default class extends Boss {
                     this.pos = that.getCoordsWeapon(name, level);
                     this.updateAlpha(that.getAlpha())
                 }
-            })
+            });
             this.weapons[name].active = true;
             this.weapons[name].weapon = weapon;
             level.effects.push(weapon);
@@ -424,6 +411,7 @@ export default class extends Boss {
                 if (Math.random() < .4 + (1 - percentHealth / 100)) {
                     this.activateWeapon('right', level);
                 }
+                this.speed = new Vector(0, 0);
                 break;
             case 1:
                 state.bulletPositions = this.fillBullets();
@@ -458,12 +446,17 @@ export default class extends Boss {
             case 3:
                 const mapOffset = 6;
                 const randomPosition = getRandomPoint(level.screenWidth - mapOffset, level.screenHeight - mapOffset);
-                state.pointPosition = new Vector(3 + randomPosition.x, 3 + randomPosition.y)
+                state.pointPosition = new Vector(3 + randomPosition.x, 3 + randomPosition.y);
                 break;
             case 4:
                 state.pointPosition = new Vector(level.screenWidth / 2, level.screenHeight / 2);
                 state.waves = Math.floor(15 + Math.random() * 10);
                 break;
         }
+    }
+
+    destroy(level) {
+        level.win({text: 'Вы победили Призрака!'});
+        level.destroyActor(this);
     }
 }
