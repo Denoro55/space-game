@@ -8,7 +8,7 @@ import maps from './maps';
 const canvas = document.querySelector('canvas');
 
 const config = {
-    development: true,
+    development: false,
     debug: false,
     scriptTime: false
 };

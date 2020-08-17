@@ -1,5 +1,5 @@
 import {Bullet} from '../../bullets';
-import {createOffsetByAngle, Vector} from '../../helpers';
+import {createOffsetByAngle, getSpeedByAngle, Vector} from '../../helpers';
 
 export function makeWave(pos, count = 8, options) {
     const bullets = [];
@@ -15,13 +15,9 @@ export function makeWave(pos, count = 8, options) {
             name: 'enemyBullet',
             angle,
             alpha: 1,
+            speed: getSpeedByAngle(options.speed, angle),
             damage: options.damage,
-            states: [
-                {
-                    type: 'changeSpeed',
-                    speed: options.speed
-                }
-            ]
+            states: []
         }))
     }
 

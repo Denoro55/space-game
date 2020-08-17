@@ -31,7 +31,11 @@ export default class Preview {
                 if (this.time < 100) {
                     this.time += 1;
                 } else {
-                    game.changeState('game');
+                    game.changeState('game', {
+                        boss: {
+                            color: this.color
+                        }
+                    });
                     game.ctx.globalAlpha = 1
                 }
                 break;

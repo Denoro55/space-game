@@ -7,7 +7,7 @@ import Boss from "./Boss"
 export default class extends Actor {
     constructor(params, level) {
         super(params);
-        this.size = new Vector(0.75, 0.75);
+        this.size = new Vector(0.65, 0.65);
         this.speed = new Vector(0.12, 0.12);
         this.shape = Shapes.circle;
         this.color = Colors.green;
@@ -15,7 +15,7 @@ export default class extends Actor {
         this.hp = this.maxHp;
         this.reloadTime = 20;
         this.shootTime = 0;
-        this.bulletSpeed = 0.18;
+        this.bulletSpeed = 0.19;
         level.player = this;
     }
 

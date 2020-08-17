@@ -7,9 +7,6 @@ import BossWeapon from "../actors/effects/BossWeapon"
 export default class extends Boss {
     constructor(params, level) {
         super(params, level);
-        this.name = 'boss';
-        this.size = new Vector(2, 2);
-        this.damage = 1;
         this.reloadTime = 35;
         this.shootTime = this.reloadTime;
         this.states = [
@@ -86,7 +83,7 @@ export default class extends Boss {
 
                         level.actors.push(new Bullet({
                             pos: new Vector(this.pos.x + (this.bulletOptions.offset * Math.cos(angle)), this.pos.y + (this.bulletOptions.offset * Math.sin(angle))),
-                            color: Colors.aqua,
+                            color: this.color,
                             size: new Vector(.15, .15),
                             name: 'enemyBullet',
                             alpha: .1,
@@ -129,7 +126,7 @@ export default class extends Boss {
 
                         level.actors.push(new Bullet({
                             pos: new Vector(this.pos.x + (this.bulletOptions.offset * Math.cos(angle)), this.pos.y + (this.bulletOptions.offset * Math.sin(angle))),
-                            color: Colors.aqua,
+                            color: this.color,
                             size: new Vector(.15, .15),
                             name: 'enemyBullet',
                             damage: this.bulletOptions.damage,
@@ -233,7 +230,7 @@ export default class extends Boss {
             const angle = (offset + state.bulletPositions.shift() * plusAngle) * Math.PI / 180;
             level.actors.push(new Bullet({
                 pos: new Vector(this.pos.x + (this.bulletOptions.offset * Math.cos(angle)), this.pos.y + (this.bulletOptions.offset * Math.sin(angle))),
-                color: Colors.aqua,
+                color: this.color,
                 size: new Vector(.2, .2),
                 name: 'enemyBullet',
                 alpha: .1,
@@ -269,7 +266,7 @@ export default class extends Boss {
     makeFloatingBullet(level) {
         level.actors.push(new Bullet({
             pos: new Vector(this.pos.x, this.pos.y),
-            color: Colors.aqua,
+            color: this.color,
             size: new Vector(.15, .15),
             name: 'enemyBullet',
             damage: this.bulletOptions.damage,
@@ -343,7 +340,7 @@ export default class extends Boss {
             const that = this;
             const weapon = new BossWeapon({
                 pos: new Vector(this.pos.x, this.pos.y),
-                color: Colors.aqua,
+                color: this.color,
                 size: new Vector(.7, .7),
                 alpha: 0,
                 shape: Shapes.circle,

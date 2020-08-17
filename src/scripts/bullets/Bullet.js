@@ -88,7 +88,7 @@ export default class extends Actor {
                     level.actors.push(new Bullet({
                         pos: new Vector(this.pos.x, this.pos.y),
                         speed: new Vector(.17 * Math.cos(angle), .17* Math.sin(angle)),
-                        color: Colors.aqua,
+                        color: this.color,
                         size: new Vector(.2, .2),
                         name: 'enemyBullet',
                         damage: 5

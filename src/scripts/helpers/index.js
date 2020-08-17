@@ -22,6 +22,10 @@ export function createOffsetByAngle (pos, angle, offset) {
     return new Vector(pos.x + (offset * Math.cos(angle)), pos.y + (offset * Math.sin(angle)))
 }
 
+export function getPercent (current, max) {
+    return current * 100 / max;
+}
+
 export {Colors, Shapes, Vector}
 
 export * from './angle';

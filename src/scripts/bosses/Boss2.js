@@ -12,19 +12,19 @@ import {
     getRandom,
     getDistanceBetweenPoints,
     getRotationDirection,
-    angleToDegrees
+    angleToDegrees,
+    getPercent
 } from '../helpers';
 import {makeWave} from './helpers';
 
 const options = {
-    color: '#e91e63',
     bullet: {
         offset: 2.2,
         speed: 0.12,
         damage: 10,
-        double: {
-            speed: 0.15
-        }
+    },
+    doubleBullet: {
+        speed: 0.15
     },
     states: {
         'multipleShooting': 'stateMultipleShooting',
@@ -39,12 +39,6 @@ const options = {
 export default class Illusionist extends Boss {
     constructor(params, level) {
         super(params, level);
-        this.size = new Vector(2, 2);
-        this.color = options.color;
-        this.angle = 0;
-        this.clone = params.clone || false;
-        this.clones = [];
-        this.setNewMovingPoint = this.setNewMovingPoint.bind(this, level);
         this.states = {
             [options.states.multipleShooting]: {
                 time: 200,
@@ -97,7 +91,7 @@ export default class Illusionist extends Boss {
                 options: {
                     times: 4,
                     condition: () => {
-                        return this.clones.length < 2
+                        return this.clones.length < 1 + this.difficult
                     }
                 }
             },
@@ -131,6 +125,9 @@ export default class Illusionist extends Boss {
                 }
             },
         };
+        this.clone = params.clone || false;
+        this.clones = [];
+        this.setNewMovingPoint = this.setNewMovingPoint.bind(this, level);
         this.stateKeys = this.getStatesKeys();
         this.currentStates = this.clone ? [options.states.moving] : [options.states.multipleShooting];
         this.currentMainState = this.currentStates[0];
@@ -141,7 +138,7 @@ export default class Illusionist extends Boss {
     }
 
     act(level) {
-        // console.log(this.currentStates);
+        // console.log(this.difficult);
         this.currentStates.forEach(state => {
             const currentState = this.states[state];
             this[state](level, currentState);
@@ -352,7 +349,7 @@ export default class Illusionist extends Boss {
         const bullets = makeWave(actor.pos, 14, {
             damage: options.bullet.damage,
             offset: .5,
-            color: options.color,
+            color: this.color,
             speed: options.bullet.speed
         });
         bullets.forEach(bullet => {
@@ -390,9 +387,20 @@ export default class Illusionist extends Boss {
             alpha: 1,
             damage: options.bullet.damage,
             angle: params.angle,
-            speed: getSpeedByAngle(options.bullet.double.speed, params.angle),
+            speed: getSpeedByAngle(options.doubleBullet.speed, params.angle),
             states: []
         })
+    }
+
+    updateDifficult() {
+        if (this.clone) return;
+        const hpPercent = getPercent(this.hp, this.maxHp);
+        for (let i = 0; i < this.difficultRanges.length; i++) {
+            if (hpPercent > this.difficultRanges[i]) {
+                this.difficult = i;
+                break;
+            }
+        }
     }
 
     destroy(level) {

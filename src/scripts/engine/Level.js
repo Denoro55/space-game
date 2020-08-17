@@ -49,7 +49,7 @@ function clamp (x, min, max) {
     return x;
 }
 
-function Level(game, currentMap, levelIndex, config) {
+function Level(game, currentMap, levelIndex, config, params) {
     this.game = game;
     this.cellSize = 40;
     this.width = currentMap[0].length;
@@ -63,6 +63,7 @@ function Level(game, currentMap, levelIndex, config) {
     this.config = config;
     this.player = {};
     this.boss = {};
+    this.params = params;
 
     for (let h = 0; h < this.height; h++ ) {
         let gridLine = [];
@@ -105,7 +106,7 @@ Level.prototype.fail = function() {
 Level.prototype.win = function(params) {
     const newParams = {
         ...params,
-        color: this.boss.color
+        color: this.params.boss.color
     };
     this.game.changeState('win', newParams);
 };

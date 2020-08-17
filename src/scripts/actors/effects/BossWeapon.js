@@ -4,11 +4,11 @@ import Bullet from "../../bullets/Bullet"
 
 export default class extends Actor {
     constructor(params) {
-        super(params)
-        this.shape = params.shape || Shapes.circle
-        this.updateFunc = params.updateFunc || null
+        super(params);
+        this.shape = params.shape || Shapes.circle;
+        this.updateFunc = params.updateFunc || null;
         this.alphaTransitionSpeed = 0.007
-        this.alive = true
+        this.alive = true;
         this.reloadTime = 30;
         this.time = this.reloadTime;
         this.activeWeapon = params.type || 0;
@@ -26,7 +26,7 @@ export default class extends Actor {
         }
 
         if (!this.alive) {
-            this.alpha = Math.max(this.alpha - this.alphaTransitionSpeed, 0)
+            this.alpha = Math.max(this.alpha - this.alphaTransitionSpeed, 0);
             if (this.alpha <= 0) {
                 level.effects = level.effects.filter(effect => effect !== this)
             }
@@ -40,7 +40,7 @@ export default class extends Actor {
                     case 0:
                         level.createActor(new Bullet({
                             pos: new Vector(this.pos.x, this.pos.y),
-                            color: Colors.aqua,
+                            color: this.color,
                             size: new Vector(.4, .4),
                             name: 'enemyBullet',
                             damage: 30,
@@ -75,12 +75,12 @@ export default class extends Actor {
                                     type: 'explode'
                                 }
                             ]
-                        }))
+                        }));
                         break;
                     case 1:
                         level.createActor(new Bullet({
                             pos: new Vector(this.pos.x, this.pos.y),
-                            color: Colors.aqua,
+                            color: this.color,
                             size: new Vector(.3, .3),
                             name: 'enemyBullet',
                             damage: 10,
@@ -104,7 +104,7 @@ export default class extends Actor {
                                     }
                                 }
                             }]
-                        }))
+                        }));
                         break
                 }
                 this.time = this.reloadTime;
